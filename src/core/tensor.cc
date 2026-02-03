@@ -24,6 +24,13 @@ namespace infini {
                      ", dtype " + dtype.toString() + ", " + runtime->toString() +
                      ", " + ss.str() + "\n";
         vector<UidBaseType> targetGuids;
+
+        for (const auto &op : targets) {
+            if (auto lockedOp = op.lock()) { // 添加非空检查
+                targetGuids.emplace_back(lockedOp->getGuid());
+            }
+        }
+
         for (const auto &op : targets)
             targetGuids.emplace_back(op.lock()->getGuid());
         if (auto o = source.lock())
