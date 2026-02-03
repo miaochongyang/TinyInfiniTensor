@@ -18,6 +18,16 @@ optional<vector<Shape>> ConcatObj::inferShape(const TensorVec &inputs) {
     // REF: https://onnx.ai/onnx/operators/onnx__Concat.html#concat-13
     // =================================== 作业 ===================================
 
+    dims[dim] = 0;
+
+    for (const auto &input: inputs) {
+        auto input_dims = input->getDims();
+        // check dims size is uniform
+        IT_ASSERT(input_dims.size() == rank);
+
+        dims[dim] += input_dims[dim];
+    }
+
     return {{dims}};
 }
 
